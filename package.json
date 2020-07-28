@@ -1,4 +1,22 @@
 {
   "name": "md-links",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "description": "Markdown Links",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YarimarDiaz/SCL013-md-links.git"
+  },
+  "author": "\"Yarimar Diaz-Magally Silva\"",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YarimarDiaz/SCL013-md-links/issues"
+  },
+  "homepage": "https://github.com/YarimarDiaz/SCL013-md-links#readme"
 }
