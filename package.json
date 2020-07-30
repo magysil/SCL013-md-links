@@ -1,7 +1,7 @@
 {
   "name": "md-links",
   "version": "0.1.0",
-  "description": "Markdown",
+  "description": "Markdown Links",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -11,16 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/magysil/SCL013-md-links.git"
+    "url": "git+https://github.com/YarimarDiaz/SCL013-md-links.git"
   },
-  "author": "Magally Silva - Yarimar Diaz",
+  "author": "\"Yarimar Diaz-Magally Silva\"",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/magysil/SCL013-md-links/issues"
+    "url": "https://github.com/YarimarDiaz/SCL013-md-links/issues"
   },
-  "homepage": "https://github.com/magysil/SCL013-md-links#readme",
+  "homepage": "https://github.com/YarimarDiaz/SCL013-md-links#readme",
   "dependencies": {
-    "fetch": "^1.1.0",
     "node-dir": "^0.1.17"
   }
 }
