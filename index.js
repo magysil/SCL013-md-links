@@ -2,16 +2,48 @@
 let fs = require("fs"); // Módulo  de sistema de archivos
 let dir = require("node-dir"); // Lee Archivos y subdirectorios
 let path = require("path"); // Resuelve la ruta a absoluta
+const fetch = require("node-fetch"); // Regresa Status de URL
+const chalk = require("chalk");
+const argv = require("yargs")
+  .command("'Directorio a Validar'", "'-v ó --validate' y/o '-s ó --stats'", {
+    validate: {
+      default: false,
+      alias: "v",
+    },
+    stats: {
+      default: false,
+      alias: "s",
+    },
+  })
+  .help().argv;
 
 // Variables requeridas
 let regEx = /(((https?:\/\/)|(http?:\/\/)|(www\.))[^\s\n)]+)(?=\))/g; // Patrón para encontrar links
 let ruta = process.argv[2];
+let opcion1 = argv.validate;
+let opcion2 = argv.v;
+let opcion3 = argv.stats;
+let opcion4 = argv.s;
 let expectMDLink = /\[([^\]]*)\]\(([^)]*)\)/g;
 let filesMDLinks = []; //Array para guardar la inf (URL, Text, File)
-console.log("Ruta desde la declaracion ", ruta);
+let ok = 0;
+let broken = 0;
 
+/* if (
+  (opcion1 === true || opcion2 === true) &&
+  (opcion4 === true || opcion3 === true)
+) {
+  console.log("Selecciono las dos Opciones");
+} else if (opcion4 === true || opcion3 === true) {
+  console.log("Opcion stats Seleccionada");
+} else if (opcion2 === true || opcion1 === true) {
+  console.log("Opcion validate Seleccionada");
+} else {
+  console.log("No selecciono opcion");
+}
+ */
 // Extrae lo link de cada archivo recibido
-const readFile = (files) => {
+const processLinks = (files) => {
   files.forEach((element) => {
     fs.readFile(element, "utf-8", (e, file) => {
       if (e) {
@@ -41,7 +73,7 @@ const mdLinks = (route) => {
   return new Promise((resolve, reject) => {
     rutaAbsRel = path.resolve(route);
     console.log("Ruta Convertida por resolve ", rutaAbsRel);
-    console.log("Procesando informacion por favor espere.....");
+    console.log(chalk.green("Procesando informacion por favor espere....."));
     if (rutaAbsRel) {
       resolve(rutaAbsRel);
     } else {
@@ -65,12 +97,83 @@ mdLinks(ruta)
         if (err) {
           console.log("Error al leer la ruta de archivos");
         } else {
-          console.log("Rutas de archivos encontrados: ", files);
-          readFile(files);
+          console.log(chalk.yellow("Rutas de archivos encontrados: "));
+          console.log(files);
+          if (
+            (opcion1 === true || opcion2 === true) &&
+            (opcion4 === true || opcion3 === true)
+          ) {
+           statsLinks(files)
+           validateLinks(files);
+           // console.log("Selecciono las dos Opciones");
+          } else if (opcion4 === true || opcion3 === true) {
+            statsLinks(files);
+           // console.log("Opcion stats Seleccionada");
+          } else if (opcion2 === true || opcion1 === true) {
+            validateLinks(files);
+            //console.log("Opcion validate Seleccionada");
+          } else {
+            processLinks(files)
+            console.log("No selecciono opcion");
+          }
+          /* processLinks(files)
+          validateLinks(files);
+          statsLinks(files); */
         }
       }
     );
   })
   .catch((error) => {
-    console.log(error);
+    //console.log(error);
   });
+
+const validateLinks = (files) => {
+  files.forEach((element) => {
+    fs.readFile(element, "utf8", (err, data) => {
+      let statusLinks = data.match(regEx);
+      for (let i = 0; i < statusLinks.length; i++) {
+        fetch(statusLinks[i])
+          .then((response) => {
+            if (response.status === 200 || response.status !== 200)
+              console.log(
+                ` File: ${element}\n Link: ${statusLinks[i]}\n Response code: ${response.status}\n `
+              );
+            return response;
+          })
+          .catch((error) => {
+            console.log(
+              "Hubo un problema con la solicitud Fetch:" + error.message
+            );
+          });
+      }
+    });
+  });
+};
+
+const statsLinks = (files) => {
+  files.forEach((element) => {
+    fs.readFile(element, "utf8", (err, data) => {
+      let statusLinks = data.match(regEx);
+      for (let i = 0; i < statusLinks.length; i++) {
+        fetch(statusLinks[i])
+          .then((response) => {
+            if (response.status === 200) ok++;
+            return response;
+          })
+          .then((response) => {
+            if (response.status !== 200) broken++;
+            return response;
+          })
+          .then(() => {
+            if (ok + broken === statusLinks.length)
+              console.log(
+                ` ✔ Total : ${statusLinks.length}\n ✔ Unique : ${ok}\n ✖ Broken : ${broken}`
+              );
+          });
+      }
+    });
+  });
+};
+
+module.exports = mdLinks;
+module.exports = processLinks;
