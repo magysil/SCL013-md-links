@@ -50,7 +50,7 @@ const processLinks = (files) => {
         console.error(e);
       } else {
         const linksFound = file.match(regEx);
-        const textLinks = file
+         const textLinks = file
           .match(expectMDLink)
           .map((v) => v.split("](")[0].slice(1));
         linksFound.forEach((link, i) =>
