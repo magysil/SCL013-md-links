@@ -20,7 +20,7 @@ Dentro de una comunidad de código abierto, nos han propuesto crear una herramie
 
 ## 2. Flujograma
 
-![md-links](/img/readme/fujograma Markdown Links.png)
+![md-links](/img/fujograma Markdown Links.png)
 
 ## 2. Instalacion
 
