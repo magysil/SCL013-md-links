@@ -1,7 +1,7 @@
 {
-  "name": "md-links",
+  "name": "md-format-validator",
   "version": "0.1.0",
-  "description": "Markdown Links",
+  "description": "Md-format-validator es una librería de Node.js que nos permite buscar en un directorio todos los archivos en formato Markdown que en su interior contengan link y asi poder validar el estado actual de cada uno de ellos.",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/YarimarDiaz/SCL013-md-links.git"
   },
-  "author": "\"Yarimar Diaz-Magally Silva\"",
+  "author": "\"Yarimar Diaz - Magally Silva\"",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/YarimarDiaz/SCL013-md-links/issues"
