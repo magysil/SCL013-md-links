@@ -40,8 +40,8 @@ let broken = 0;
   console.log("Opcion validate Seleccionada");
 } else {
   console.log("No selecciono opcion");
-}
- */
+} */
+
 // Extrae lo link de cada archivo recibido
 const processLinks = (files) => {
   files.forEach((element) => {
@@ -131,14 +131,20 @@ const validateLinks = (files) => {
   files.forEach((element) => {
     fs.readFile(element, "utf8", (err, data) => {
       let statusLinks = data.match(regEx);
+      let  textLinks = data.match(expectMDLink)
+          .map((v) => v.split("](")[0].slice(1));
       for (let i = 0; i < statusLinks.length; i++) {
         fetch(statusLinks[i])
           .then((response) => {
-            if (response.status === 200 || response.status !== 200)
-              console.log(
-                ` File: ${element}\n Link: ${statusLinks[i]}\n Response code: ${response.status}\n `
+            if (response.status === 200) {
+              console.log(` File: ${element}\n Link: ${statusLinks[i]}\n ${ chalk.yellow (' ✔ ' + response.status)}\n`
               );
-            return response;
+            } else {
+              console.log(` File: ${element}\n Texto: ${textLinks} Link: ${statusLinks[i]}\n ${ chalk.red (' ✖ ' + response.status)}\n `
+            );
+            }
+            
+              return response;
           })
           .catch((error) => {
             console.log(
