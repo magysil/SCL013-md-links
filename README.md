@@ -31,19 +31,13 @@ Dentro de una comunidad de código abierto, nos han propuesto crear una herramie
 * Instalar Node.
 
 * Instalar librería.
-#### `npm i md-links`
+#### `npm i md-format-validator`
 
 ## 4. Funcionalidad
 #### Para hacer uso de la librería:
 
-* Import mdLinks
-#### `import { mdLinks } from 'md-Links nombre';`
-
-* Require mdLinks
-#### `const mdLinks = requeri ('md-Links nombre');`
-
-Una vez la librería se encuentre importada (import) ó requerida (requeri)
-#### `md-links <path - ejemplo:C:\Users\Lenovo\Desktop\md\carpeta1> --validate --stats;`
+Una vez la librería se encuentre instalada se ejecuta via CLI (Command Line Interface - Interfaz de Línea de Comando) de la siguiente manera.
+#### `node index <path - ejemplo:C:\Users\Lenovo\Desktop\md\carpeta1> --validate --stats;`
 
 * Opciones de uso:
 
@@ -55,7 +49,7 @@ text: '1.-MarkdownIn'
 file: ' file: 'C:\\Users\\Lenovo\\Desktop\\md\\carpeta1\\exampletest.md'
 ```
 
-md-links path --validate ó -v: Provee una lista de links con path de origen, url, texto, mensaje de status:
+md-links path --validate ó -v: Provee una lista de links con path de origen, url, mensaje de status:
 
 ```
 File: C:\Users\Yarimar Diaz\Desktop\Laboratorias\SCL013-md-links\md\test.md'
@@ -69,7 +63,7 @@ Link: https://www.google.com/5500`
 ✖ 404
 ```
 
-md-links path --stats ó -v: Provee una lista con la cantidad de links en el archivo y sus links únicos.
+md-links path --stats ó -s: Provee una lista con la cantidad de links en el archivo y sus links únicos.
 
 ```
 'C:\\Users\\Yarimar Diaz\\Desktop\\Laboratorias\\SCL013-md-links\\md\\test.md'
