@@ -29,6 +29,7 @@ let filesMDLinks = []; //Array para guardar la inf (URL, Text, File)
 let ok = 0;
 let broken = 0;
 
+// Extrae lo link de cada archivo recibido
 const processLinks = (files) => {
   files.forEach((element) => {
     fs.readFile(element, "utf-8", (e, file) => {
@@ -114,6 +115,8 @@ const validateLinks = (files) => {
   files.forEach((element) => {
     fs.readFile(element, "utf8", (err, data) => {
       let statusLinks = data.match(regEx);
+      let  textLinks = data.match(expectMDLink)
+          .map((v) => v.split("](")[0].slice(1));
       for (let i = 0; i < statusLinks.length; i++) {
         fetch(statusLinks[i])
           .then((response) => {
@@ -124,7 +127,12 @@ const validateLinks = (files) => {
               console.log(
                 ` File: ${element}\n Link: ${statusLinks[i]}\n ${ chalk.red (' ✖ ' + response.status)}\n`
               );
-            return response;
+            } else {
+              console.log(` File: ${element}\n Texto: ${textLinks} Link: ${statusLinks[i]}\n ${ chalk.red (' ✖ ' + response.status)}\n `
+            );
+            }
+            
+              return response;
           })
           .catch((error) => {
             console.log(
