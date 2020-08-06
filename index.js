@@ -126,12 +126,7 @@ const validateLinks = (files) => {
               ); else
               console.log(
                 ` File: ${element}\n Link: ${statusLinks[i]}\n ${ chalk.red (' ✖ ' + response.status)}\n`
-              );
-            } else {
-              console.log(` File: ${element}\n Texto: ${textLinks} Link: ${statusLinks[i]}\n ${ chalk.red (' ✖ ' + response.status)}\n `
-            );
-            }
-            
+              );            
               return response;
           })
           .catch((error) => {
