@@ -36,9 +36,7 @@ const processLinks = (files) => {
         console.error(e);
       } else {
         const linksFound = file.match(regEx);
-         const textLinks = file
-          .match(expectMDLink)
-          .map((v) => v.split("](")[0].slice(1));
+         const textLinks = file.match(expectMDLink).map((v) => v.split("](")[0].slice(1));
         linksFound.forEach((link, i) =>
           filesMDLinks.push({
             href: link,
@@ -89,8 +87,7 @@ mdLinks(ruta)
             (opcion1 === true || opcion2 === true) &&
             (opcion4 === true || opcion3 === true)
           ) {
-           statsLinks(files)
-           validateLinks(files);
+            statsLinksWithvalidate(files)
            // console.log("Selecciono las dos Opciones");
           } else if (opcion4 === true || opcion3 === true) {
             statsLinks(files);
@@ -112,7 +109,7 @@ mdLinks(ruta)
   .catch((error) => {
     //console.log(error);
   });
-
+  
 const validateLinks = (files) => {
   files.forEach((element) => {
     fs.readFile(element, "utf8", (err, data) => {
@@ -140,6 +137,31 @@ const validateLinks = (files) => {
 };
 
 const statsLinks = (files) => {
+  files.forEach((element) => {
+    fs.readFile(element, "utf8", (err, data) => {
+      let statusLinks = data.match(regEx);
+      for (let i = 0; i < statusLinks.length; i++) {
+        fetch(statusLinks[i])
+          .then((response) => {
+            if (response.status === 200) ok++;
+            return response;
+          })
+          .then((response) => {
+            if (response.status !== 200) broken++;
+            return response;
+          })
+          .then(() => {
+            if (ok + broken === statusLinks.length)
+              console.log(
+                `${ chalk.green ('  ✔ Total :' + statusLinks.length)}\n  ${ chalk.blue ('✔ Unique :' + ok)}`
+              );
+          });
+      }
+    });
+  });
+};
+
+const statsLinksWithvalidate = (files) => {
   files.forEach((element) => {
     fs.readFile(element, "utf8", (err, data) => {
       let statusLinks = data.match(regEx);
