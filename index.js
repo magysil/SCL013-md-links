@@ -29,19 +29,6 @@ let filesMDLinks = []; //Array para guardar la inf (URL, Text, File)
 let ok = 0;
 let broken = 0;
 
-/* if (
-  (opcion1 === true || opcion2 === true) &&
-  (opcion4 === true || opcion3 === true)
-) {
-  console.log("Selecciono las dos Opciones");
-} else if (opcion4 === true || opcion3 === true) {
-  console.log("Opcion stats Seleccionada");
-} else if (opcion2 === true || opcion1 === true) {
-  console.log("Opcion validate Seleccionada");
-} else {
-  console.log("No selecciono opcion");
-} */
-
 // Extrae lo link de cada archivo recibido
 const processLinks = (files) => {
   files.forEach((element) => {
@@ -50,9 +37,7 @@ const processLinks = (files) => {
         console.error(e);
       } else {
         const linksFound = file.match(regEx);
-         const textLinks = file
-          .match(expectMDLink)
-          .map((v) => v.split("](")[0].slice(1));
+         const textLinks = file.match(expectMDLink).map((v) => v.split("](")[0].slice(1));
         linksFound.forEach((link, i) =>
           filesMDLinks.push({
             href: link,
@@ -103,8 +88,7 @@ mdLinks(ruta)
             (opcion1 === true || opcion2 === true) &&
             (opcion4 === true || opcion3 === true)
           ) {
-           statsLinks(files)
-           validateLinks(files);
+            statsLinksWithvalidate(files)
            // console.log("Selecciono las dos Opciones");
           } else if (opcion4 === true || opcion3 === true) {
             statsLinks(files);
@@ -126,7 +110,7 @@ mdLinks(ruta)
   .catch((error) => {
     //console.log(error);
   });
-
+  
 const validateLinks = (files) => {
   files.forEach((element) => {
     fs.readFile(element, "utf8", (err, data) => {
@@ -136,14 +120,13 @@ const validateLinks = (files) => {
       for (let i = 0; i < statusLinks.length; i++) {
         fetch(statusLinks[i])
           .then((response) => {
-            if (response.status === 200) {
-              console.log(` File: ${element}\n Link: ${statusLinks[i]}\n ${ chalk.yellow (' ✔ ' + response.status)}\n`
-              );
-            } else {
-              console.log(` File: ${element}\n Texto: ${textLinks} Link: ${statusLinks[i]}\n ${ chalk.red (' ✖ ' + response.status)}\n `
-            );
-            }
-            
+            if (response.status === 200)
+              console.log(
+                ` File: ${element}\n Link: ${statusLinks[i]}\n ${ chalk.yellow (' ✔ ' + response.status)}\n`
+              ); else
+              console.log(
+                ` File: ${element}\n Link: ${statusLinks[i]}\n ${ chalk.red (' ✖ ' + response.status)}\n`
+              );            
               return response;
           })
           .catch((error) => {
@@ -173,7 +156,32 @@ const statsLinks = (files) => {
           .then(() => {
             if (ok + broken === statusLinks.length)
               console.log(
-                ` ✔ Total : ${statusLinks.length}\n ✔ Unique : ${ok}\n ✖ Broken : ${broken}`
+                `${ chalk.green ('  ✔ Total :' + statusLinks.length)}\n  ${ chalk.blue ('✔ Unique :' + ok)}`
+              );
+          });
+      }
+    });
+  });
+};
+
+const statsLinksWithvalidate = (files) => {
+  files.forEach((element) => {
+    fs.readFile(element, "utf8", (err, data) => {
+      let statusLinks = data.match(regEx);
+      for (let i = 0; i < statusLinks.length; i++) {
+        fetch(statusLinks[i])
+          .then((response) => {
+            if (response.status === 200) ok++;
+            return response;
+          })
+          .then((response) => {
+            if (response.status !== 200) broken++;
+            return response;
+          })
+          .then(() => {
+            if (ok + broken === statusLinks.length)
+              console.log(
+                `${ chalk.green ('  ✔ Total :' + statusLinks.length)}\n  ${ chalk.blue ('✔ Unique :' + ok)}\n  ${ chalk.red ('✖ Broken :' + broken)}`
               );
           });
       }
